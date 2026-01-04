@@ -4,6 +4,8 @@ import { Header } from '@/components/sections/Header';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { ServicesGrid } from '@/components/sections/ServicesGrid';
 import { ProvidersSection } from '@/components/sections/ProvidersSection';
+import { StatsSection } from '@/components/sections/StatsSection';
+import { ProviderRegistration } from '@/components/sections/ProviderRegistration';
 import { trackEvent } from '@/utils/analytics';
 
 const translations = {
@@ -239,6 +241,8 @@ const Index = () => {
         setShowMap={setShowMap}
       />
 
+      <StatsSection t={t} />
+
       {showMap && (
         <ProvidersSection
           t={t}
@@ -254,6 +258,8 @@ const Index = () => {
           resetFilters={resetFilters}
         />
       )}
+
+      <ProviderRegistration t={t} services={services} lang={lang} />
 
       <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="container mx-auto text-center">

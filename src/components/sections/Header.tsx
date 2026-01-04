@@ -127,9 +127,15 @@ export const Header = ({
               </DialogContent>
             </Dialog>
 
+            <Button onClick={() => {
+              document.getElementById('provider-registration')?.scrollIntoView({ behavior: 'smooth' });
+            }}>
+              {t.register}
+            </Button>
+
             <Dialog>
               <DialogTrigger asChild>
-                <Button>{t.register}</Button>
+                <Button variant="ghost">{t.login}</Button>
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
