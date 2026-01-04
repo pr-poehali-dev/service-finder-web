@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
+import { Slider } from '@/components/ui/slider';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Select,
   SelectContent,
@@ -19,7 +21,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 const translations = {
   ru: {
@@ -51,6 +60,16 @@ const translations = {
     share: 'Поделиться',
     addToFavorites: 'В избранное',
     chooseService: 'Выберите услугу',
+    favorites: 'Избранное',
+    filters: 'Фильтры',
+    priceRange: 'Диапазон цен',
+    minRating: 'Минимальный рейтинг',
+    selectDate: 'Выберите дату',
+    applyFilters: 'Применить',
+    resetFilters: 'Сбросить',
+    found: 'Найдено',
+    providers: 'исполнителей',
+    noFavorites: 'Нет избранных исполнителей',
   },
   en: {
     title: 'Find a professional for any task',
@@ -81,6 +100,16 @@ const translations = {
     share: 'Share',
     addToFavorites: 'Add to Favorites',
     chooseService: 'Choose service',
+    favorites: 'Favorites',
+    filters: 'Filters',
+    priceRange: 'Price range',
+    minRating: 'Minimum rating',
+    selectDate: 'Select date',
+    applyFilters: 'Apply',
+    resetFilters: 'Reset',
+    found: 'Found',
+    providers: 'providers',
+    noFavorites: 'No favorite providers',
   },
   tt: {
     title: 'Теләсә нинди эш өчен профессионал табыгыз',
@@ -111,6 +140,16 @@ const translations = {
     share: 'Уртаклашу',
     addToFavorites: 'Сайланганга',
     chooseService: 'Хезмәт сайлагыз',
+    favorites: 'Сайланганнар',
+    filters: 'Фильтрлар',
+    priceRange: 'Бәя диапазоны',
+    minRating: 'Минималь рейтинг',
+    selectDate: 'Дата сайлагыз',
+    applyFilters: 'Кулланырга',
+    resetFilters: 'Чистарту',
+    found: 'Табылды',
+    providers: 'башкаручы',
+    noFavorites: 'Сайланган башкаручылар юк',
   },
 };
 
@@ -125,11 +164,13 @@ const services = [
   { id: 8, name_ru: 'Фото и видео', name_en: 'Photo & Video', name_tt: 'Фото һәм видео', icon: 'Camera', color: 'bg-yellow-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/d634eecb-d57e-445d-9515-e93d661cb119.jpg' },
 ];
 
-const providers = [
-  { id: 1, name: 'Иван Петров', rating: 4.9, reviews: 156, service: 'Ремонт и строительство', price: '1500', city: 'Москва', isFavorite: false },
-  { id: 2, name: 'Мария Сидорова', rating: 4.8, reviews: 98, service: 'Уборка и клининг', price: '800', city: 'Москва', isFavorite: false },
-  { id: 3, name: 'Алексей Козлов', rating: 5.0, reviews: 234, service: 'IT и компьютеры', price: '2000', city: 'Москва', isFavorite: false },
-  { id: 4, name: 'Елена Новикова', rating: 4.7, reviews: 67, service: 'Красота и здоровье', price: '1200', city: 'Москва', isFavorite: false },
+const providersData = [
+  { id: 1, name: 'Иван Петров', rating: 4.9, reviews: 156, service: 'Ремонт и строительство', price: 1500, city: 'Москва', isFavorite: false },
+  { id: 2, name: 'Мария Сидорова', rating: 4.8, reviews: 98, service: 'Уборка и клининг', price: 800, city: 'Москва', isFavorite: false },
+  { id: 3, name: 'Алексей Козлов', rating: 5.0, reviews: 234, service: 'IT и компьютеры', price: 2000, city: 'Москва', isFavorite: false },
+  { id: 4, name: 'Елена Новикова', rating: 4.7, reviews: 67, service: 'Красота и здоровье', price: 1200, city: 'Москва', isFavorite: false },
+  { id: 5, name: 'Дмитрий Смирнов', rating: 4.6, reviews: 45, service: 'Грузоперевозки', price: 1000, city: 'Москва', isFavorite: false },
+  { id: 6, name: 'Ольга Иванова', rating: 4.9, reviews: 122, service: 'Образование', price: 900, city: 'Москва', isFavorite: false },
 ];
 
 const pricingPlans = [
@@ -144,6 +185,9 @@ const Index = () => {
   const [selectedCity, setSelectedCity] = useState('Москва');
   const [showMap, setShowMap] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [priceRange, setPriceRange] = useState([0, 3000]);
+  const [minRating, setMinRating] = useState([0]);
+  const [selectedDate, setSelectedDate] = useState<Date>();
 
   const t = translations[lang];
 
@@ -170,6 +214,18 @@ const Index = () => {
     }
   };
 
+  const resetFilters = () => {
+    setPriceRange([0, 3000]);
+    setMinRating([0]);
+    setSelectedDate(undefined);
+  };
+
+  const filteredProviders = providersData.filter(provider => {
+    const matchesPrice = provider.price >= priceRange[0] && provider.price <= priceRange[1];
+    const matchesRating = provider.rating >= minRating[0];
+    return matchesPrice && matchesRating;
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
@@ -185,6 +241,41 @@ const Index = () => {
             </div>
 
             <div className="flex items-center gap-4">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative">
+                    <Icon name="Heart" size={20} />
+                    {favorites.length > 0 && (
+                      <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                        {favorites.length}
+                      </Badge>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">{t.favorites}</h4>
+                    {favorites.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">{t.noFavorites}</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {providersData.filter(p => favorites.includes(p.id)).map(provider => (
+                          <div key={provider.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                            <div>
+                              <p className="font-medium text-sm">{provider.name}</p>
+                              <p className="text-xs text-muted-foreground">{provider.service}</p>
+                            </div>
+                            <Button variant="ghost" size="icon" onClick={() => toggleFavorite(provider.id)}>
+                              <Icon name="X" size={16} />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+
               <Button variant="ghost" size="icon" onClick={handleShare}>
                 <Icon name="Share2" size={20} />
               </Button>
@@ -383,9 +474,86 @@ const Index = () => {
       {showMap && (
         <section className="py-16 px-4 bg-gradient-to-b from-gray-50 to-white">
           <div className="container mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">{t.nearYou}</h2>
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-3xl font-bold">{t.nearYou}</h2>
+                <p className="text-muted-foreground mt-2">
+                  {t.found} {filteredProviders.length} {t.providers}
+                </p>
+              </div>
+              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="lg">
+                    <Icon name="SlidersHorizontal" className="mr-2" size={20} />
+                    {t.filters}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80" align="end">
+                  <div className="space-y-6">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <label className="text-sm font-medium">{t.priceRange}</label>
+                        <span className="text-sm text-muted-foreground">
+                          {priceRange[0]}₽ - {priceRange[1]}₽
+                        </span>
+                      </div>
+                      <Slider
+                        value={priceRange}
+                        onValueChange={setPriceRange}
+                        min={0}
+                        max={3000}
+                        step={100}
+                        className="mb-4"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <label className="text-sm font-medium">{t.minRating}</label>
+                        <span className="text-sm text-muted-foreground">
+                          {minRating[0].toFixed(1)} ⭐
+                        </span>
+                      </div>
+                      <Slider
+                        value={minRating}
+                        onValueChange={setMinRating}
+                        min={0}
+                        max={5}
+                        step={0.1}
+                        className="mb-4"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">{t.selectDate}</label>
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        disabled={(date) => date < new Date()}
+                        locale={ru}
+                        className="rounded-md border"
+                      />
+                      {selectedDate && (
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Выбрано: {format(selectedDate, 'dd MMMM yyyy', { locale: ru })}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button onClick={resetFilters} variant="outline" className="flex-1">
+                        {t.resetFilters}
+                      </Button>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
             <div className="space-y-4 max-w-4xl mx-auto">
-              {providers.map((provider) => (
+              {filteredProviders.map((provider) => (
                 <Card key={provider.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
                     <div className="flex items-start gap-4">
@@ -403,7 +571,7 @@ const Index = () => {
                             onClick={() => toggleFavorite(provider.id)}
                           >
                             <Icon 
-                              name={favorites.includes(provider.id) ? "Heart" : "Heart"} 
+                              name="Heart" 
                               className={favorites.includes(provider.id) ? "fill-red-500 text-red-500" : ""}
                               size={20} 
                             />
