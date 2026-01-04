@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Icon from '@/components/ui/icon';
 import { Header } from '@/components/sections/Header';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { ServicesGrid } from '@/components/sections/ServicesGrid';
 import { ProvidersSection } from '@/components/sections/ProvidersSection';
+import { trackEvent } from '@/utils/analytics';
 
 const translations = {
   ru: {
@@ -200,6 +201,14 @@ const Index = () => {
     const matchesRating = provider.rating >= minRating[0];
     return matchesPrice && matchesRating;
   });
+
+  useEffect(() => {
+    trackEvent('page_view', 'engagement', 'Home Page');
+  }, []);
+
+  const handleSearch = () => {
+    trackEvent('search', 'engagement', searchQuery || 'empty_query');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">

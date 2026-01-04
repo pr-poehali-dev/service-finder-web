@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
+import { trackEvent } from '@/utils/analytics';
 
 interface HeroSectionProps {
   t: any;
@@ -11,6 +12,10 @@ interface HeroSectionProps {
 }
 
 export const HeroSection = ({ t, searchQuery, setSearchQuery, setShowMap, services }: HeroSectionProps) => {
+  const handleSearch = () => {
+    trackEvent('search', 'engagement', searchQuery || 'empty_query');
+    setShowMap(true);
+  };
   return (
     <>
       <section className="py-12 px-4">
@@ -56,7 +61,7 @@ export const HeroSection = ({ t, searchQuery, setSearchQuery, setShowMap, servic
               onChange={(e) => setSearchQuery(e.target.value)}
               className="h-14 text-lg"
             />
-            <Button size="lg" className="h-14 px-8" onClick={() => setShowMap(true)}>
+            <Button size="lg" className="h-14 px-8" onClick={handleSearch}>
               <Icon name="Search" className="mr-2" />
               {t.searchBtn}
             </Button>
