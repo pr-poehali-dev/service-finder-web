@@ -107,14 +107,14 @@ const translations = {
 };
 
 const services = [
-  { id: 1, name_ru: 'Ремонт и строительство', name_en: 'Repair & Construction', name_tt: 'Ремонт һәм төзелеш', icon: 'Hammer', color: 'bg-blue-500' },
-  { id: 2, name_ru: 'Уборка и клининг', name_en: 'Cleaning Services', name_tt: 'Чистарту хезмәте', icon: 'Sparkles', color: 'bg-green-500' },
-  { id: 3, name_ru: 'Грузоперевозки', name_en: 'Transportation', name_tt: 'Йөк ташу', icon: 'Truck', color: 'bg-orange-500' },
-  { id: 4, name_ru: 'IT и компьютеры', name_en: 'IT & Computers', name_tt: 'IT һәм компьютерлар', icon: 'Laptop', color: 'bg-purple-500' },
-  { id: 5, name_ru: 'Красота и здоровье', name_en: 'Beauty & Health', name_tt: 'Матурлык һәм сәламәтлек', icon: 'Heart', color: 'bg-pink-500' },
-  { id: 6, name_ru: 'Образование', name_en: 'Education', name_tt: 'Мәгариф', icon: 'GraduationCap', color: 'bg-indigo-500' },
-  { id: 7, name_ru: 'Юридические услуги', name_en: 'Legal Services', name_tt: 'Юридик хезмәтләр', icon: 'Scale', color: 'bg-red-500' },
-  { id: 8, name_ru: 'Фото и видео', name_en: 'Photo & Video', name_tt: 'Фото һәм видео', icon: 'Camera', color: 'bg-yellow-500' },
+  { id: 1, name_ru: 'Ремонт и строительство', name_en: 'Repair & Construction', name_tt: 'Ремонт һәм төзелеш', icon: 'Hammer', color: 'bg-blue-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/cf1d37fc-5890-414f-883c-494651611bf1.jpg' },
+  { id: 2, name_ru: 'Уборка и клининг', name_en: 'Cleaning Services', name_tt: 'Чистарту хезмәте', icon: 'Sparkles', color: 'bg-green-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/d8955a6d-ad0d-468e-a384-98557dc2e600.jpg' },
+  { id: 3, name_ru: 'Грузоперевозки', name_en: 'Transportation', name_tt: 'Йөк ташу', icon: 'Truck', color: 'bg-orange-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/2e8bb93b-7294-46f6-9a03-430e3e3d4e9b.jpg' },
+  { id: 4, name_ru: 'IT и компьютеры', name_en: 'IT & Computers', name_tt: 'IT һәм компьютерлар', icon: 'Laptop', color: 'bg-purple-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/660816af-33d5-4a51-a8e8-935009f9fa26.jpg' },
+  { id: 5, name_ru: 'Красота и здоровье', name_en: 'Beauty & Health', name_tt: 'Матурлык һәм сәламәтлек', icon: 'Heart', color: 'bg-pink-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/790b056d-3918-4102-8ec8-b6de89573d45.jpg' },
+  { id: 6, name_ru: 'Образование', name_en: 'Education', name_tt: 'Мәгариф', icon: 'GraduationCap', color: 'bg-indigo-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/7d609203-f598-4307-b59c-d371dc489e54.jpg' },
+  { id: 7, name_ru: 'Юридические услуги', name_en: 'Legal Services', name_tt: 'Юридик хезмәтләр', icon: 'Scale', color: 'bg-red-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/219dfc8d-2bea-4799-89fe-4fbb9e8dd2c3.jpg' },
+  { id: 8, name_ru: 'Фото и видео', name_en: 'Photo & Video', name_tt: 'Фото һәм видео', icon: 'Camera', color: 'bg-yellow-500', image: 'https://cdn.poehali.dev/projects/b6103b3f-1ab3-4c50-8df0-9b003473f0a3/files/d634eecb-d57e-445d-9515-e93d661cb119.jpg' },
 ];
 
 const providers = [
@@ -274,26 +274,34 @@ const Index = () => {
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold mb-8 text-center">{t.popularServices}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {services.map((service, index) => (
-              <Card
+              <div
                 key={service.id}
-                className="cursor-pointer hover:shadow-lg transition-all hover:-translate-y-1 animate-fade-in"
+                className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all hover:scale-105 hover:shadow-2xl animate-fade-in h-[280px]"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 onClick={() => {
                   setSelectedService(service.id);
                   setShowMap(true);
                 }}
               >
-                <CardHeader className="text-center">
-                  <div className={`w-16 h-16 ${service.color} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                    <Icon name={service.icon as any} className="text-white" size={32} />
+                <img
+                  src={service.image}
+                  alt={lang === 'ru' ? service.name_ru : lang === 'en' ? service.name_en : service.name_tt}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                      <Icon name={service.icon as any} className="text-white" size={20} />
+                    </div>
                   </div>
-                  <CardTitle className="text-lg">
+                  <h3 className="text-white font-bold text-xl">
                     {lang === 'ru' ? service.name_ru : lang === 'en' ? service.name_en : service.name_tt}
-                  </CardTitle>
-                </CardHeader>
-              </Card>
+                  </h3>
+                </div>
+              </div>
             ))}
           </div>
         </div>
