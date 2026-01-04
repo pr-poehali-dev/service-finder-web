@@ -1,13 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Icon from '@/components/ui/icon';
-import { Button } from '@/components/ui/button';
 import { Header } from '@/components/sections/Header';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { ServicesGrid } from '@/components/sections/ServicesGrid';
 import { ProvidersSection } from '@/components/sections/ProvidersSection';
-import { StatsSection } from '@/components/sections/StatsSection';
-import { ProviderRegistration } from '@/components/sections/ProviderRegistration';
-import { trackEvent } from '@/utils/analytics';
 
 const translations = {
   ru: {
@@ -205,14 +201,6 @@ const Index = () => {
     return matchesPrice && matchesRating;
   });
 
-  useEffect(() => {
-    trackEvent('page_view', 'engagement', 'Home Page');
-  }, []);
-
-  const handleSearch = () => {
-    trackEvent('search', 'engagement', searchQuery || 'empty_query');
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <Header
@@ -242,99 +230,20 @@ const Index = () => {
         setShowMap={setShowMap}
       />
 
-      <StatsSection t={t} />
-
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Зарегистрированные исполнители</h2>
-            <p className="text-muted-foreground">Все проверенные специалисты на платформе</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {providersData.map((provider) => (
-              <div
-                key={provider.id}
-                className="bg-gradient-to-br from-gray-50 to-white border rounded-xl p-6 hover:shadow-xl transition-shadow"
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xl font-bold">
-                    {provider.name.split(' ').map((n: string) => n[0]).join('')}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-lg mb-1">{provider.name}</h3>
-                    <p className="text-sm text-muted-foreground">{provider.service}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Icon name="Star" size={14} className="text-yellow-500 fill-yellow-500" />
-                      <span className="text-sm font-semibold">{provider.rating}</span>
-                      <span className="text-xs text-muted-foreground">({provider.reviews})</span>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => toggleFavorite(provider.id)}
-                  >
-                    <Icon 
-                      name="Heart" 
-                      className={favorites.includes(provider.id) ? "fill-red-500 text-red-500" : ""}
-                      size={18} 
-                    />
-                  </Button>
-                </div>
-                <div className="flex items-center gap-2 mb-4 text-sm">
-                  <Icon name="MapPin" size={14} className="text-gray-500" />
-                  <span>{provider.city}</span>
-                  <span className="mx-2">•</span>
-                  <span className="font-semibold text-primary">{t.from} {provider.price}₽</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => {
-                      trackEvent('call_click', 'conversion', provider.name);
-                      window.location.href = `tel:${provider.phone}`;
-                    }}
-                  >
-                    <Icon name="Phone" size={14} className="mr-1" />
-                    Позвонить
-                  </Button>
-                  <Button 
-                    size="sm"
-                    onClick={() => {
-                      setShowMap(true);
-                      setTimeout(() => {
-                        const element = document.querySelector('[data-providers-section]');
-                        element?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    }}
-                  >
-                    <Icon name="MapPin" size={14} className="mr-1" />
-                    На карте
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {showMap && (
-        <div data-providers-section>
-          <ProvidersSection
-            t={t}
-            filteredProviders={filteredProviders}
-            favorites={favorites}
-            toggleFavorite={toggleFavorite}
-            priceRange={priceRange}
-            setPriceRange={setPriceRange}
-            minRating={minRating}
-            setMinRating={setMinRating}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            resetFilters={resetFilters}
-          />
-        </div>
+        <ProvidersSection
+          t={t}
+          filteredProviders={filteredProviders}
+          favorites={favorites}
+          toggleFavorite={toggleFavorite}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          minRating={minRating}
+          setMinRating={setMinRating}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          resetFilters={resetFilters}
+        />
       )}
 
       <footer className="bg-gray-900 text-white py-12 px-4">

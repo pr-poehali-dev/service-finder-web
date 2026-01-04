@@ -1,5 +1,4 @@
 import Icon from '@/components/ui/icon';
-import { trackEvent } from '@/utils/analytics';
 
 interface ServicesGridProps {
   t: any;
@@ -9,10 +8,6 @@ interface ServicesGridProps {
 }
 
 export const ServicesGrid = ({ t, lang, services, setShowMap }: ServicesGridProps) => {
-  const handleServiceClick = (serviceName: string) => {
-    trackEvent('service_click', 'engagement', serviceName);
-    setShowMap(true);
-  };
   return (
     <section className="py-16 px-4">
       <div className="container mx-auto">
@@ -23,7 +18,7 @@ export const ServicesGrid = ({ t, lang, services, setShowMap }: ServicesGridProp
               key={service.id}
               className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all hover:scale-105 hover:shadow-2xl animate-fade-in h-[280px]"
               style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => handleServiceClick(lang === 'ru' ? service.name_ru : lang === 'en' ? service.name_en : service.name_tt)}
+              onClick={() => setShowMap(true)}
             >
               <img
                 src={service.image}

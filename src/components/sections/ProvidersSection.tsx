@@ -24,7 +24,6 @@ import { Label } from '@/components/ui/label';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
-import { trackEvent } from '@/utils/analytics';
 
 interface ProvidersSectionProps {
   t: any;
@@ -65,9 +64,7 @@ export const ProvidersSection = ({
   const GOOGLE_MAPS_API_KEY = 'AIzaSyDLHyHzu2YCd87FVwRDAH59XdphxN8t3W4';
 
   const handleSubmitRequest = (providerId: number) => {
-    const provider = filteredProviders.find(p => p.id === providerId);
-    trackEvent('submit_request', 'conversion', provider?.name);
-    alert(`Заявка отправлена исполнителю ${provider?.name}!\n\nИмя: ${requestForm.name}\nТелефон: ${requestForm.phone}\nОписание: ${requestForm.description}`);
+    alert(`Заявка отправлена исполнителю ${filteredProviders.find(p => p.id === providerId)?.name}!\n\nИмя: ${requestForm.name}\nТелефон: ${requestForm.phone}\nОписание: ${requestForm.description}`);
     setRequestForm({ name: '', phone: '', description: '' });
     setRequestDialogOpen(false);
   };
@@ -219,7 +216,6 @@ export const ProvidersSection = ({
                       className="w-full"
                       onClick={(e) => {
                         e.stopPropagation();
-                        trackEvent('call_click', 'conversion', provider.name);
                         window.location.href = `tel:${provider.phone}`;
                       }}
                     >

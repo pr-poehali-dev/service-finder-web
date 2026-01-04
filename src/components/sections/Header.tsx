@@ -133,7 +133,7 @@ export const Header = ({
               </DialogTrigger>
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Регистрация</DialogTitle>
+                  <DialogTitle>{t.register}</DialogTitle>
                 </DialogHeader>
                 <Tabs defaultValue="client" className="w-full">
                   <TabsList className="grid w-full grid-cols-2">
@@ -149,16 +149,12 @@ export const Header = ({
                     <Input placeholder="Email" type="email" />
                     <Input placeholder="Телефон" />
                     <Input placeholder="Пароль" type="password" />
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center gap-2">
-                      <Icon name="CheckCircle" className="text-green-600" size={20} />
-                      <span className="text-sm text-blue-900">Автоматическое подтверждение регистрации</span>
-                    </div>
-                    <Button className="w-full" onClick={() => alert('Регистрация успешна!\nВы можете сразу начинать использовать платформу.')}>{t.register}</Button>
+                    <Button className="w-full">{t.register}</Button>
                   </TabsContent>
                   <TabsContent value="provider" className="space-y-4">
                     <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl mb-6">
-                      <h3 className="text-xl font-bold mb-2">🎉 3 месяца бесплатно!</h3>
-                      <p className="text-sm text-muted-foreground">Затем автоматическое списание по выбранному тарифу</p>
+                      <h3 className="text-xl font-bold mb-2">{t.freeTrialMonths}</h3>
+                      <p className="text-sm text-muted-foreground">Затем выберите удобный тариф</p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-4 mb-6">
@@ -201,36 +197,7 @@ export const Header = ({
                       </SelectContent>
                     </Select>
                     <Input placeholder="Пароль" type="password" />
-                    
-                    <div className="border-t pt-4">
-                      <h4 className="font-semibold mb-3 flex items-center gap-2">
-                        <Icon name="CreditCard" size={20} className="text-blue-600" />
-                        Привязка карты
-                      </h4>
-                      <Input placeholder="Номер карты" maxLength={19} />
-                      <div className="grid grid-cols-2 gap-3 mt-3">
-                        <Input placeholder="ММ/ГГ" maxLength={5} />
-                        <Input placeholder="CVV" maxLength={3} type="password" />
-                      </div>
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-3">
-                        <div className="flex items-start gap-2">
-                          <Icon name="AlertCircle" className="text-yellow-600 mt-0.5" size={16} />
-                          <p className="text-xs text-yellow-800">
-                            Первое списание произойдёт через 3 месяца после регистрации согласно выбранному тарифу. Вы можете отменить подписку в любой момент.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
-                      <Icon name="CheckCircle" className="text-green-600" size={20} />
-                      <span className="text-sm text-green-900">Автоматическое подтверждение регистрации</span>
-                    </div>
-                    
-                    <Button className="w-full" onClick={() => alert('Регистрация успешна!\n\n🎉 3 месяца бесплатно\n💳 Карта привязана\n✅ Профиль активирован\n\nВы можете сразу начинать получать заказы!')}>
-                      <Icon name="Rocket" className="mr-2" size={20} />
-                      {t.register}
-                    </Button>
+                    <Button className="w-full">{t.register}</Button>
                   </TabsContent>
                 </Tabs>
               </DialogContent>
