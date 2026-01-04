@@ -11,6 +11,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
@@ -43,8 +53,26 @@ export const ProvidersSection = ({
   resetFilters,
 }: ProvidersSectionProps) => {
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
+  const [requestDialogOpen, setRequestDialogOpen] = useState(false);
+  const [currentProviderId, setCurrentProviderId] = useState<number | null>(null);
+  const [requestForm, setRequestForm] = useState({
+    name: '',
+    phone: '',
+    description: '',
+  });
 
   const GOOGLE_MAPS_API_KEY = 'AIzaSyDLHyHzu2YCd87FVwRDAH59XdphxN8t3W4';
+
+  const handleSubmitRequest = (providerId: number) => {
+    alert(`Заявка отправлена исполнителю ${filteredProviders.find(p => p.id === providerId)?.name}!\n\nИмя: ${requestForm.name}\nТелефон: ${requestForm.phone}\nОписание: ${requestForm.description}`);
+    setRequestForm({ name: '', phone: '', description: '' });
+    setRequestDialogOpen(false);
+  };
+
+  const openRequestDialog = (providerId: number) => {
+    setCurrentProviderId(providerId);
+    setRequestDialogOpen(true);
+  };
 
   return (
     <section className="py-16 px-4 bg-gradient-to-b from-gray-50 to-white">
@@ -182,10 +210,29 @@ export const ProvidersSection = ({
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Button className="w-full">
-                    <Icon name="MessageCircle" className="mr-2" size={18} />
-                    Написать
-                  </Button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `tel:${provider.phone}`;
+                      }}
+                    >
+                      <Icon name="Phone" className="mr-2" size={18} />
+                      Позвонить
+                    </Button>
+                    <Button 
+                      className="w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openRequestDialog(provider.id);
+                      }}
+                    >
+                      <Icon name="Send" className="mr-2" size={18} />
+                      Заявка
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -223,14 +270,14 @@ export const ProvidersSection = ({
                     }}
                     onCloseClick={() => setSelectedProvider(null)}
                   >
-                    <div className="p-2">
+                    <div className="p-3 min-w-[280px]">
                       <h3 className="font-bold text-lg mb-1">
                         {filteredProviders.find(p => p.id === selectedProvider)!.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mb-2">
+                      <p className="text-sm text-gray-600 mb-3">
                         {filteredProviders.find(p => p.id === selectedProvider)!.service}
                       </p>
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-3">
                         <span className="text-yellow-500">⭐</span>
                         <span className="font-semibold">
                           {filteredProviders.find(p => p.id === selectedProvider)!.rating}
@@ -239,9 +286,26 @@ export const ProvidersSection = ({
                           ({filteredProviders.find(p => p.id === selectedProvider)!.reviews} {t.reviews})
                         </span>
                       </div>
-                      <p className="text-lg font-bold text-blue-600">
+                      <p className="text-xl font-bold text-blue-600 mb-3">
                         {t.from} {filteredProviders.find(p => p.id === selectedProvider)!.price}₽
                       </p>
+                      <div className="flex items-center gap-2 mb-4 p-2 bg-gray-100 rounded">
+                        <Icon name="Phone" size={16} className="text-blue-600" />
+                        <a 
+                          href={`tel:${filteredProviders.find(p => p.id === selectedProvider)!.phone}`}
+                          className="text-sm font-medium text-blue-600 hover:underline"
+                        >
+                          {filteredProviders.find(p => p.id === selectedProvider)!.phone}
+                        </a>
+                      </div>
+                      <button
+                        onClick={() => {
+                          openRequestDialog(selectedProvider);
+                        }}
+                        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors font-medium"
+                      >
+                        Оставить заявку
+                      </button>
                     </div>
                   </InfoWindow>
                 )}
@@ -249,6 +313,55 @@ export const ProvidersSection = ({
             </APIProvider>
           </div>
         </div>
+
+        <Dialog open={requestDialogOpen} onOpenChange={setRequestDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Оставить заявку</DialogTitle>
+              <DialogDescription>
+                Заполните форму, и исполнитель {currentProviderId && filteredProviders.find(p => p.id === currentProviderId)?.name} свяжется с вами
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Ваше имя</Label>
+                <Input
+                  id="name"
+                  placeholder="Иван Иванов"
+                  value={requestForm.name}
+                  onChange={(e) => setRequestForm({ ...requestForm, name: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Телефон</Label>
+                <Input
+                  id="phone"
+                  placeholder="+7 (999) 123-45-67"
+                  value={requestForm.phone}
+                  onChange={(e) => setRequestForm({ ...requestForm, phone: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Описание проблемы</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Опишите, какая услуга вам нужна и когда..."
+                  rows={5}
+                  value={requestForm.description}
+                  onChange={(e) => setRequestForm({ ...requestForm, description: e.target.value })}
+                />
+              </div>
+              <Button 
+                className="w-full" 
+                size="lg"
+                onClick={() => currentProviderId && handleSubmitRequest(currentProviderId)}
+              >
+                <Icon name="Send" className="mr-2" size={18} />
+                Отправить заявку
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </section>
   );

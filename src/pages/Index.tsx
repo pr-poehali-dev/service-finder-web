@@ -140,12 +140,12 @@ const services = [
 ];
 
 const providersData = [
-  { id: 1, name: 'Иван Петров', rating: 4.9, reviews: 156, service: 'Ремонт и строительство', price: 1500, city: 'Москва', isFavorite: false, lat: 55.7558, lng: 37.6173 },
-  { id: 2, name: 'Мария Сидорова', rating: 4.8, reviews: 98, service: 'Уборка и клининг', price: 800, city: 'Москва', isFavorite: false, lat: 55.7400, lng: 37.6100 },
-  { id: 3, name: 'Алексей Козлов', rating: 5.0, reviews: 234, service: 'IT и компьютеры', price: 2000, city: 'Москва', isFavorite: false, lat: 55.7700, lng: 37.6300 },
-  { id: 4, name: 'Елена Новикова', rating: 4.7, reviews: 67, service: 'Красота и здоровье', price: 1200, city: 'Москва', isFavorite: false, lat: 55.7300, lng: 37.6400 },
-  { id: 5, name: 'Дмитрий Смирнов', rating: 4.6, reviews: 45, service: 'Грузоперевозки', price: 1000, city: 'Москва', isFavorite: false, lat: 55.7600, lng: 37.6500 },
-  { id: 6, name: 'Ольга Иванова', rating: 4.9, reviews: 122, service: 'Образование', price: 900, city: 'Москва', isFavorite: false, lat: 55.7450, lng: 37.6250 },
+  { id: 1, name: 'Иван Петров', rating: 4.9, reviews: 156, service: 'Ремонт и строительство', price: 1500, city: 'Москва', isFavorite: false, lat: 55.7558, lng: 37.6173, phone: '+7 (495) 123-45-67' },
+  { id: 2, name: 'Мария Сидорова', rating: 4.8, reviews: 98, service: 'Уборка и клининг', price: 800, city: 'Москва', isFavorite: false, lat: 55.7400, lng: 37.6100, phone: '+7 (495) 234-56-78' },
+  { id: 3, name: 'Алексей Козлов', rating: 5.0, reviews: 234, service: 'IT и компьютеры', price: 2000, city: 'Москва', isFavorite: false, lat: 55.7700, lng: 37.6300, phone: '+7 (495) 345-67-89' },
+  { id: 4, name: 'Елена Новикова', rating: 4.7, reviews: 67, service: 'Красота и здоровье', price: 1200, city: 'Москва', isFavorite: false, lat: 55.7300, lng: 37.6400, phone: '+7 (495) 456-78-90' },
+  { id: 5, name: 'Дмитрий Смирнов', rating: 4.6, reviews: 45, service: 'Грузоперевозки', price: 1000, city: 'Москва', isFavorite: false, lat: 55.7600, lng: 37.6500, phone: '+7 (495) 567-89-01' },
+  { id: 6, name: 'Ольга Иванова', rating: 4.9, reviews: 122, service: 'Образование', price: 900, city: 'Москва', isFavorite: false, lat: 55.7450, lng: 37.6250, phone: '+7 (495) 678-90-12' },
 ];
 
 const pricingPlans = [
