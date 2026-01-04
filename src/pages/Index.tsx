@@ -259,8 +259,6 @@ const Index = () => {
         />
       )}
 
-      <ProviderRegistration t={t} services={services} lang={lang} />
-
       <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-4">

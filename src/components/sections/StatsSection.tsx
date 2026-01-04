@@ -100,7 +100,7 @@ export const StatsSection = ({ t }: StatsSectionProps) => {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mt-8">
+        <div className="mt-8">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -127,40 +127,6 @@ export const StatsSection = ({ t }: StatsSectionProps) => {
                         className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-500"
                         style={{ width: `${service.percent}%` }}
                       />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Icon name="MapPin" className="text-purple-600" size={20} />
-                Активность по городам
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[
-                  { city: 'Москва', count: 847, percent: 45 },
-                  { city: 'Санкт-Петербург', count: 523, percent: 28 },
-                  { city: 'Казань', count: 312, percent: 16 },
-                  { city: 'Екатеринбург', count: 208, percent: 11 },
-                ].map((city, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold">
-                        {i + 1}
-                      </div>
-                      <div>
-                        <p className="font-medium">{city.city}</p>
-                        <p className="text-sm text-muted-foreground">{city.count} посетителей</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-lg">{city.percent}%</p>
                     </div>
                   </div>
                 ))}
