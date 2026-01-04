@@ -1,13 +1,26 @@
 import Icon from '@/components/ui/icon';
+import { trackEvent } from '@/utils/analytics';
 
 interface ServicesGridProps {
   t: any;
   lang: 'ru' | 'en' | 'tt';
   services: any[];
   setShowMap: (show: boolean) => void;
+  setSelectedService: (service: string) => void;
 }
 
-export const ServicesGrid = ({ t, lang, services, setShowMap }: ServicesGridProps) => {
+export const ServicesGrid = ({ t, lang, services, setShowMap, setSelectedService }: ServicesGridProps) => {
+  const handleServiceClick = (service: any) => {
+    const serviceName = lang === 'ru' ? service.name_ru : lang === 'en' ? service.name_en : service.name_tt;
+    trackEvent('service_click', 'engagement', serviceName);
+    setSelectedService(service.name_ru);
+    setShowMap(true);
+    setTimeout(() => {
+      const element = document.querySelector('[data-providers-section]');
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <section className="py-16 px-4">
       <div className="container mx-auto">
@@ -18,7 +31,7 @@ export const ServicesGrid = ({ t, lang, services, setShowMap }: ServicesGridProp
               key={service.id}
               className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all hover:scale-105 hover:shadow-2xl animate-fade-in h-[280px]"
               style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => setShowMap(true)}
+              onClick={() => handleServiceClick(service)}
             >
               <img
                 src={service.image}

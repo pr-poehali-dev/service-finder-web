@@ -37,6 +37,7 @@ interface ProvidersSectionProps {
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
   resetFilters: () => void;
+  selectedService: string | null;
 }
 
 export const ProvidersSection = ({
@@ -51,6 +52,7 @@ export const ProvidersSection = ({
   selectedDate,
   setSelectedDate,
   resetFilters,
+  selectedService,
 }: ProvidersSectionProps) => {
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
   const [requestDialogOpen, setRequestDialogOpen] = useState(false);
@@ -79,7 +81,9 @@ export const ProvidersSection = ({
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold">{t.nearYou}</h2>
+            <h2 className="text-3xl font-bold">
+              {selectedService ? selectedService : t.nearYou}
+            </h2>
             <p className="text-muted-foreground mt-2">
               {t.found} {filteredProviders.length} {t.providers}
             </p>

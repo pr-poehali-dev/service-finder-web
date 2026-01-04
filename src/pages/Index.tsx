@@ -163,6 +163,7 @@ const Index = () => {
   const [priceRange, setPriceRange] = useState([0, 3000]);
   const [minRating, setMinRating] = useState([0]);
   const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedService, setSelectedService] = useState<string | null>(null);
 
   const t = translations[lang];
 
@@ -198,7 +199,8 @@ const Index = () => {
   const filteredProviders = providersData.filter(provider => {
     const matchesPrice = provider.price >= priceRange[0] && provider.price <= priceRange[1];
     const matchesRating = provider.rating >= minRating[0];
-    return matchesPrice && matchesRating;
+    const matchesService = selectedService ? provider.service === selectedService : true;
+    return matchesPrice && matchesRating && matchesService;
   });
 
   return (
@@ -228,22 +230,26 @@ const Index = () => {
         lang={lang}
         services={services}
         setShowMap={setShowMap}
+        setSelectedService={setSelectedService}
       />
 
       {showMap && (
-        <ProvidersSection
-          t={t}
-          filteredProviders={filteredProviders}
-          favorites={favorites}
-          toggleFavorite={toggleFavorite}
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
-          minRating={minRating}
-          setMinRating={setMinRating}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          resetFilters={resetFilters}
-        />
+        <div data-providers-section>
+          <ProvidersSection
+            t={t}
+            filteredProviders={filteredProviders}
+            favorites={favorites}
+            toggleFavorite={toggleFavorite}
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            minRating={minRating}
+            setMinRating={setMinRating}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            resetFilters={resetFilters}
+            selectedService={selectedService}
+          />
+        </div>
       )}
 
       <footer className="bg-gray-900 text-white py-12 px-4">
